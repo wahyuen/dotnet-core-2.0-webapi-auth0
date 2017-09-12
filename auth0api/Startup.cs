@@ -65,8 +65,6 @@ namespace auth0api
                 app.UseDeveloperExceptionPage();
             }
 
-            dbContext.Database.Migrate();
-
             app.UseCors(policy => policy
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
