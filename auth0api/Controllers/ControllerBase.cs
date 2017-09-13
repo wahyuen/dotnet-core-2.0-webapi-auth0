@@ -7,7 +7,7 @@ namespace auth0api.Controllers
     {
         protected IMediator Mediator;
 
-        public ControllerBase(IMediator mediator)
+        protected ControllerBase(IMediator mediator)
         {
             Mediator = mediator;
         }
