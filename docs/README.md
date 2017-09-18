@@ -123,6 +123,35 @@ services.AddAuthentication(options =>
 app.UseAuthentication();
 ```
 
+### Example of and anonymous endpoint vs authorized endpoint
+
+```cs
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace auth0api.Controllers
+{
+    [Route("api")]
+    public class PingController : Controller
+    {
+        [HttpGet]
+        [Route("ping")]
+        public JsonResult Ping()
+        {
+            return new JsonResult("Pong");
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("ping/secure")]
+        public JsonResult PingSecured()
+        {
+            return new JsonResult("All good. You only get this message if you are authenticated.");
+        }
+    }
+}
+```
+
 ## Setting up MediatR (Recommended)
 
 In our quest to keep our code maintainable and decoupled as much as we can, we have adopted the use of the Command Query Responsibility Segregation (CQRS) and Mediator pattern via the use of a library called MediatR. For a more in depth read of why we have found this library useful, please see ![here](https://lostechies.com/jimmybogard/2014/09/09/tackling-cross-cutting-concerns-with-a-mediator-pipeline/)
