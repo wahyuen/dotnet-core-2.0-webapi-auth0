@@ -117,7 +117,7 @@ services.AddAuthentication(options =>
 });
 ```
 
-* Ensure that your application is configured to use Authentication, Startup.cs::Configure() method
+* Ensure that your application is configured to use Authentication, **Startup.cs::Configure()** method
 
 ```cs
 app.UseAuthentication();
@@ -156,8 +156,29 @@ namespace auth0api.Controllers
 
 In our quest to keep our code maintainable and decoupled as much as we can, we have adopted the use of the Command Query Responsibility Segregation (CQRS) and Mediator pattern via the use of a library called MediatR. For a more in depth read of why we have found this library useful, please see ![here](https://lostechies.com/jimmybogard/2014/09/09/tackling-cross-cutting-concerns-with-a-mediator-pipeline/)
 
-* Add the MediatoR extension to Startup.cs::ConfigureServices() method
+* Add the MediatoR extension to **Startup.cs::ConfigureServices()** method
 
 ```cs
 services.AddMediatR();
 ```
+
+## Setting up VSTS to deploy to Azure
+
+### Build Definition
+
+* Create a new Build Definition using the ASP.NET Core template
+
+![](core.PNG)
+
+* Add in a new Archive task in between the `Restore` and `Build` tasks. This task will bundle up the EF.dll file which is used for the database migration during release
+
+![](ef.PNG)
+
+### Release Definition
+
+Due to how new some of the tooling is around EF Core 2 and VSTS, we will be utilizing an extension to help facilitate database migrations. See the following link ![Colin's ALM Corner Build & Release Tools](https://marketplace.visualstudio.com/items?itemName=colinsalmcorner.colinsalmcorner-buildtasks)
+
+* Create a new Release Definition using the Azure App Service Deployment template
+
+![](azure.PNG)
+
