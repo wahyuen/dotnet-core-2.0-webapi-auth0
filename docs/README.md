@@ -2,11 +2,11 @@
 
 This seed project has been created to assist in setting up a new ASP .Net Core 2.0 WebAPI project. The following features have been implemented as part of this guide:
 
-- ![initial project structure created from dotnet cli webapi template](#initial-setup)
-- ![integration to a SQL database using Entity Framework Core 2.0](#setting-up-entityframework-and-database)
-- ![integration to accept authentication from Auth0 using JWT tokens](#setting-up-auth0-and-jwt-authentication)
-- ![example of anonymous and authorized endpoints](#example-of-and-anonymous-endpoint-vs-authorized-endpoint)
-- ![setup of Mediatr library](#setting-up-mediatr-recommended)
+- [initial project structure created from dotnet cli webapi template](#initial-setup)
+- [integration to a SQL database using Entity Framework Core 2.0](#setting-up-entityframework-and-database)
+- [integration to accept authentication from Auth0 using JWT tokens](#setting-up-auth0-and-jwt-authentication)
+- [example of anonymous and authorized endpoints](#example-of-and-anonymous-endpoint-vs-authorized-endpoint)
+- [setup of Mediatr library](#setting-up-mediatr-recommended)
 - guide to setup VSTS build/deploy pipeline with DB Migrations
 
 The following sections describe 'how' this solution was created. If you intend on using it, simply clone the repo, updating your namespace and insert your Auth0 credentials and off you go!
