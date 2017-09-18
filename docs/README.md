@@ -19,14 +19,64 @@ The following sections describe 'how' this solution was created. If you intend o
   
   ![](createprojectwebapi.PNG)
 
-* Add the following NuGet packages
- - MediatR
- - MediatR.Extensions.Microsoft.DependencyInjection
- - Microsoft.EntityFrameworkCore
- - Microsoft.EntityFrameworkCore.SqlServer
- - Microsoft.EntityFrameworkCore.Tools.DotNet
+* Add the following NuGet packages:
+  - MediatR
+  - MediatR.Extensions.Microsoft.DependencyInjection
+  - Microsoft.EntityFrameworkCore
+  - Microsoft.EntityFrameworkCore.SqlServer
+  - Microsoft.EntityFrameworkCore.Tools.DotNet
   
 ## Setting up EntityFramework and Database
+
+* Add a ConnectionString node to appsettings.json
+
+![](createproject.PNG)
+
+* Create an object to represent an Application User
+
+```cs
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace auth0api.Users
+{
+    public class ApplicationUser
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string ExternalId { get; set; }
+        public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+    }
+}
+```
+
+* Create a database context object
+
+```cs
+using auth0api.Users;
+using Microsoft.EntityFrameworkCore;
+
+namespace auth0api.Data
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
+
+        public DbSet<ApplicationUser> Users { get; set; }
+    }
+}
+
+```
+
+* Update Startup.cs::ConfigureServices() method
+
+```cs
+services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+```
 
 ### Setting up Database Migrations
 
