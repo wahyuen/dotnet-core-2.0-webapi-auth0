@@ -28,7 +28,7 @@ The following sections describe 'how' this solution was created. If you intend o
   
 ## Setting up EntityFramework and Database
 
-* Add a ConnectionString node to appsettings.json
+* Add a **ConnectionString node** to **appsettings.json**
 
 ![](createproject.PNG)
 
@@ -72,7 +72,7 @@ namespace auth0api.Data
 
 ```
 
-* Update Startup.cs::ConfigureServices() method
+* Update **Startup.cs::ConfigureServices()** method
 
 ```cs
 services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -80,6 +80,55 @@ services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Conf
 
 ### Setting up Database Migrations
 
-## Setting up MediatR
+The following section describes how to setup database migrations to allow you to keep track of the state of your database schema along with your code. These instructions are based off this ![article](https://docs.microsoft.com/en-us/ef/core/get-started/aspnetcore/new-db)
+
+* Launch **Package Manager Console**
+
+* Execute the command `Add-Migration InitialCreate`
+
+* Update the database with the following command `Update-Database`
+
+![](pmc.PNG)
 
 ## Setting up Auth0 and JWT Authentication
+
+* Add your Auth0 Credentials from the portal into the appsettings.json file.
+
+```json
+  "Auth0": {
+    "Domain": "<insert Auth0 domain>",
+    "ApiIdentifier": "<insert Auth0 api identifier>"
+  }
+```
+
+* Update Startup.cs::ConfigureServices() method to accept JWT tokens with the above configuration
+
+```cs
+services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(options =>
+{
+    options.Authority = domain;
+    options.Audience = Configuration["Auth0:ApiIdentifier"];
+    options.SaveToken = true;
+});
+```
+
+* Ensure that your application is configured to use Authentication, Startup.cs::Configure() method
+
+```cs
+app.UseAuthentication();
+```
+
+## Setting up MediatR (Recommended)
+
+In our quest to keep our code maintainable and decoupled as much as we can, we have adopted the use of the Command Query Responsibility Segregation (CQRS) and Mediator pattern via the use of a library called MediatR. For a more in depth read of why we have found this library useful, please see ![here](https://lostechies.com/jimmybogard/2014/09/09/tackling-cross-cutting-concerns-with-a-mediator-pipeline/)
+
+* Add the MediatoR extension to Startup.cs::ConfigureServices() method
+
+```cs
+services.AddMediatR();
+```
