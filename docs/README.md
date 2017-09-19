@@ -166,7 +166,7 @@ services.AddMediatR();
 
 ### Build Definition
 
-* Create a new Build Definition using the ASP.NET Core template
+* Create a new `Build Definition` using the `ASP.NET Core` template
 
 ![](core.PNG)
 
@@ -178,7 +178,38 @@ services.AddMediatR();
 
 Due to how new some of the tooling is around EF Core 2 and VSTS, we will be utilizing an extension to help facilitate database migrations. See the following link ![Colin's ALM Corner Build & Release Tools](https://marketplace.visualstudio.com/items?itemName=colinsalmcorner.colinsalmcorner-buildtasks)
 
-* Create a new Release Definition using the Azure App Service Deployment template
+* Create a new `Release Definition` using the `Azure App Service Deployment` template
 
 ![](azure.PNG)
 
+* Add an `Extract Files` task so unzip the archive we created during the Build
+
+![](extract.PNG)
+
+* Add a `Tokenize File` task so that we can inject markers into the file for replacement
+
+![](tokenize.PNG)
+
+* Add a `Replace Tokens` task to replace the `ConnectionString` value in `appsettings.json`
+
+![](replace.PNG)
+
+* Click on the `Variables` tab for the Release Definition and add a new key-value pair to replace the `ConnectionString`
+
+![](variables.PNG)
+
+* Go back to `Tasks` and add a `Command Line` task to execute the migration
+
+Please note to replace the variables with the name of your project.
+
+> exec --depsfile **auth0api.deps.json** --runtimeconfig **auth0api.runtimeconfig.json** ef.dll database update --assembly **auth0api.dll** --startup-assembly **auth0api.dll** --verbose --root-namespace **auth0api**
+
+![](dbupdate.PNG)
+
+* Update the `Deploy Azure App Service` task to point to the zip file we want to deploy
+
+![](deploy.PNG)
+
+* Your release definition is now complete and ready to perform the migration as part of your release to your environments!
+
+![](tasks.PNG)
